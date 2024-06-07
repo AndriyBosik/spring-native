@@ -27,7 +27,7 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
 	implementation ('org.springframework.boot:spring-boot-starter-web') {
-		exclude (module: 'spring-boot-starter-tomcat')
+//		exclude (module: 'spring-boot-starter-tomcat')
 	}
 	implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.0.2'
 
