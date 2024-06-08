@@ -27,12 +27,12 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
 	implementation ('org.springframework.boot:spring-boot-starter-web') {
-		exclude (module: 'spring-boot-starter-tomcat')
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
 	}
-	implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.0.2'
+	implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.0.0'
 
 	runtimeOnly 'org.postgresql:postgresql'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
