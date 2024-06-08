@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
+import com.amazonaws.serverless.proxy.model.HttpApiV2AuthorizerMap;
 import com.amazonaws.serverless.proxy.model.HttpApiV2ProxyRequest;
 import com.amazonaws.serverless.proxy.model.HttpApiV2ProxyRequestContext;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
@@ -31,6 +32,12 @@ public class MyRuntimeHints implements RuntimeHintsRegistrar {
                             MemberCategory.INTROSPECT_PUBLIC_METHODS)
                     .registerType(
                             AwsProxyResponse.class,
+                            MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
+                            MemberCategory.INTROSPECT_PUBLIC_CONSTRUCTORS,
+                            MemberCategory.INVOKE_PUBLIC_METHODS,
+                            MemberCategory.INTROSPECT_PUBLIC_METHODS)
+                    .registerType(
+                            HttpApiV2AuthorizerMap.HttpApiV2AuthorizerDeserializer.class,
                             MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
                             MemberCategory.INTROSPECT_PUBLIC_CONSTRUCTORS,
                             MemberCategory.INVOKE_PUBLIC_METHODS,
