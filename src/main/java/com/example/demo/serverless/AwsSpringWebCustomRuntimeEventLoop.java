@@ -116,9 +116,10 @@ public final class AwsSpringWebCustomRuntimeEventLoop implements SmartLifecycle 
         AwsProxyHttpServletResponseWriter responseWriter = new AwsProxyHttpServletResponseWriter();
 
         logger.info("Entering event loop");
-        while (this.isRunning()) {
+//        while (this.isRunning()) {
             logger.debug("Attempting to get new event");
-            ResponseEntity<String> incomingEvent = rest.exchange(requestEntity, String.class);
+//            ResponseEntity<String> incomingEvent = rest.exchange(requestEntity, String.class);
+            ResponseEntity<String> incomingEvent = mockCall();
 
             if (incomingEvent != null && incomingEvent.hasBody()) {
                 if (logger.isDebugEnabled()) {
@@ -139,24 +140,24 @@ public final class AwsSpringWebCustomRuntimeEventLoop implements SmartLifecycle 
                     }
                     System.out.println(awsResponse.getBody());
 
-                    String invocationUrl = MessageFormat.format(LAMBDA_INVOCATION_URL_TEMPLATE, runtimeApi,
-                            LAMBDA_VERSION_DATE, requestId);
-
-                    ResponseEntity<byte[]> result = rest.exchange(RequestEntity.post(URI.create(invocationUrl))
-                            .header("User-Agent", USER_AGENT_VALUE).body(awsResponse), byte[].class);
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Response sent: body: " + result.getBody() +
-                                "; status: " + result.getStatusCode() + "; headers: " + result.getHeaders());
-                    }
-                    if (logger.isInfoEnabled()) {
-                        logger.info("Result POST status: " + result);
-                    }
+//                    String invocationUrl = MessageFormat.format(LAMBDA_INVOCATION_URL_TEMPLATE, runtimeApi,
+//                            LAMBDA_VERSION_DATE, requestId);
+//
+//                    ResponseEntity<byte[]> result = rest.exchange(RequestEntity.post(URI.create(invocationUrl))
+//                            .header("User-Agent", USER_AGENT_VALUE).body(awsResponse), byte[].class);
+//                    if (logger.isDebugEnabled()) {
+//                        logger.debug("Response sent: body: " + result.getBody() +
+//                                "; status: " + result.getStatusCode() + "; headers: " + result.getHeaders());
+//                    }
+//                    if (logger.isInfoEnabled()) {
+//                        logger.info("Result POST status: " + result);
+//                    }
                 } catch (Exception e) {
                     logger.error(e);
                     this.propagateAwsError(requestId, e, mapper, runtimeApi, rest);
                 }
             }
-        }
+//        }
     }
 
     private void propagateAwsError(String requestId, Exception e, ObjectMapper mapper, String runtimeApi, RestTemplate rest) {
