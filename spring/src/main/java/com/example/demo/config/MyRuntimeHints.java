@@ -22,6 +22,8 @@ import com.amazonaws.serverless.proxy.model.HttpApiV2ProxyRequestContext;
 import com.amazonaws.serverless.proxy.model.MultiValuedTreeMap;
 import com.amazonaws.serverless.proxy.model.RequestSource;
 import com.amazonaws.serverless.proxy.model.SingleValueHeaders;
+import com.example.demo.dto.PageDto;
+import com.example.demo.model.PageRequest;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aot.hint.ExecutableMode;
@@ -29,7 +31,7 @@ import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
 
-import java.util.Set;
+import java.util.stream.Stream;
 
 @Slf4j
 public class MyRuntimeHints implements RuntimeHintsRegistrar {
@@ -67,7 +69,7 @@ public class MyRuntimeHints implements RuntimeHintsRegistrar {
 //                            MemberCategory.INVOKE_PUBLIC_METHODS,
 //                            MemberCategory.INTROSPECT_PUBLIC_METHODS);
 
-            Set.of(
+            Stream.of(
                             HttpApiV2ProxyRequest.class,
                             HttpApiV2ProxyRequestContext.class,
                             AwsProxyResponse.class,
@@ -92,7 +94,24 @@ public class MyRuntimeHints implements RuntimeHintsRegistrar {
                             HttpApiV2JwtAuthorizer.class,
                             MultiValuedTreeMap.class,
                             RequestSource.class,
-                            SingleValueHeaders.class)
+                            SingleValueHeaders.class,
+                            PageDto.class,
+                            PageRequest.class)
+                    .forEach(type -> hints.reflection().registerType(
+                            type,
+                            MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
+                            MemberCategory.INTROSPECT_PUBLIC_CONSTRUCTORS,
+                            MemberCategory.INVOKE_PUBLIC_METHODS,
+                            MemberCategory.INTROSPECT_PUBLIC_METHODS));
+
+            Stream.of(
+                            org.apache.ibatis.logging.nologging.NoLoggingImpl.class,
+                            org.apache.ibatis.logging.stdout.StdOutImpl.class,
+                            org.apache.ibatis.logging.jdk14.Jdk14LoggingImpl.class,
+                            org.apache.ibatis.logging.log4j2.Log4j2Impl.class,
+                            org.apache.ibatis.logging.log4j.Log4jImpl.class,
+                            org.apache.ibatis.logging.commons.JakartaCommonsLoggingImpl.class,
+                            org.apache.ibatis.logging.slf4j.Slf4jImpl.class)
                     .forEach(type -> hints.reflection().registerType(
                             type,
                             MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,

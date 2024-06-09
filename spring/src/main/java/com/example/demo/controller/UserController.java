@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.PageDto;
 import com.example.demo.dto.UserDto;
+import com.example.demo.model.PageRequest;
 import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +17,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<Page<UserDto>> getUsers(Pageable pageable) {
-        Page<UserDto> page = userService.findAll(pageable);
-        return ResponseEntity.ok(page);
+    public ResponseEntity<PageDto<UserDto>> getUsers(PageRequest pageRequest) {
+        PageDto<UserDto> pageDto = userService.findAll(pageRequest);
+        return ResponseEntity.ok(pageDto);
     }
 }
