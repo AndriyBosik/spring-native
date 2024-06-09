@@ -51,7 +51,7 @@ import java.util.concurrent.Executors;
  */
 public final class AwsSpringWebCustomRuntimeEventLoop implements SmartLifecycle {
 
-    private static Log logger = LogFactory.getLog(AwsSpringWebCustomRuntimeEventLoop.class);
+    private final static Log logger = LogFactory.getLog(AwsSpringWebCustomRuntimeEventLoop.class);
 
     static final String LAMBDA_VERSION_DATE = "2018-06-01";
     private static final String LAMBDA_ERROR_URL_TEMPLATE = "http://{0}/{1}/runtime/invocation/{2}/error";
@@ -72,9 +72,7 @@ public final class AwsSpringWebCustomRuntimeEventLoop implements SmartLifecycle 
 
     public void run() {
         this.running = true;
-        this.executor.execute(() -> {
-            eventLoop(this.applicationContext);
-        });
+        this.executor.execute(() -> eventLoop(this.applicationContext));
     }
 
     @Override
@@ -116,10 +114,10 @@ public final class AwsSpringWebCustomRuntimeEventLoop implements SmartLifecycle 
         AwsProxyHttpServletResponseWriter responseWriter = new AwsProxyHttpServletResponseWriter();
 
         logger.info("Entering event loop");
-//        while (this.isRunning()) {
+        while (this.isRunning()) {
             logger.debug("Attempting to get new event");
-//            ResponseEntity<String> incomingEvent = rest.exchange(requestEntity, String.class);
-            ResponseEntity<String> incomingEvent = mockCall();
+            ResponseEntity<String> incomingEvent = rest.exchange(requestEntity, String.class);
+//            ResponseEntity<String> incomingEvent = mockCall();
 
             if (incomingEvent != null && incomingEvent.hasBody()) {
                 if (logger.isDebugEnabled()) {
@@ -138,26 +136,26 @@ public final class AwsSpringWebCustomRuntimeEventLoop implements SmartLifecycle 
                         logger.debug("Received response - body: " + awsResponse.getBody() +
                                 "; status: " + awsResponse.getStatusCode() + "; headers: " + awsResponse.getHeaders());
                     }
-                    System.out.println(awsResponse.getBody());
+//                    System.out.println(awsResponse.getBody());
 
-//                    String invocationUrl = MessageFormat.format(LAMBDA_INVOCATION_URL_TEMPLATE, runtimeApi,
-//                            LAMBDA_VERSION_DATE, requestId);
-//
-//                    ResponseEntity<byte[]> result = rest.exchange(RequestEntity.post(URI.create(invocationUrl))
-//                            .header("User-Agent", USER_AGENT_VALUE).body(awsResponse), byte[].class);
-//                    if (logger.isDebugEnabled()) {
-//                        logger.debug("Response sent: body: " + result.getBody() +
-//                                "; status: " + result.getStatusCode() + "; headers: " + result.getHeaders());
-//                    }
-//                    if (logger.isInfoEnabled()) {
-//                        logger.info("Result POST status: " + result);
-//                    }
+                    String invocationUrl = MessageFormat.format(LAMBDA_INVOCATION_URL_TEMPLATE, runtimeApi,
+                            LAMBDA_VERSION_DATE, requestId);
+
+                    ResponseEntity<byte[]> result = rest.exchange(RequestEntity.post(URI.create(invocationUrl))
+                            .header("User-Agent", USER_AGENT_VALUE).body(awsResponse), byte[].class);
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Response sent: body: " + result.getBody() +
+                                "; status: " + result.getStatusCode() + "; headers: " + result.getHeaders());
+                    }
+                    if (logger.isInfoEnabled()) {
+                        logger.info("Result POST status: " + result);
+                    }
                 } catch (Exception e) {
                     logger.error(e);
                     this.propagateAwsError(requestId, e, mapper, runtimeApi, rest);
                 }
             }
-//        }
+        }
     }
 
     private void propagateAwsError(String requestId, Exception e, ObjectMapper mapper, String runtimeApi, RestTemplate rest) {
