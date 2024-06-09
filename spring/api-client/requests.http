@@ -1,0 +1,19 @@
+### Get message
+// @no-log
+GET http://localhost:8080/api/hello/SnapStart HTTP/1.1
+Accept: application/json
+
+
+
+### Bad Request
+// @no-log
+GET http://localhost:8080/api/exception/illegal-argument HTTP/1.1
+Accept: application/json
+
+
+
+### Get users (Requires authentication)
+// @no-log
+GET http://localhost:8080/api/users HTTP/1.1
+Accept: application/json
+Authorization: Basic YWRtaW46YWRtaW4=
