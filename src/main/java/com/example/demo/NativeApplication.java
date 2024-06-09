@@ -13,15 +13,15 @@ import org.springframework.context.annotation.ImportRuntimeHints;
 @EnableConfigurationProperties(DataSourceProperties.class)
 @ImportRuntimeHints(MyRuntimeHints.class)
 public class NativeApplication {
-	private static final Log log = LogFactory.getLog(NativeApplication.class);
+    private static final Log log = LogFactory.getLog(NativeApplication.class);
 
-	static {
-		log.info("Started (Static Block)");
-	}
+    static {
+        log.info("Started (Static Block)");
+    }
 
-	public static void main(String[] args) {
-		log.info("Started (Main Method)");
-		SpringApplication.run(NativeApplication.class, args);
-	}
+    public static void main(String[] args) {
+        log.info("Started (Main Method)");
+        SpringApplication.run(NativeApplication.class, args);
+    }
 
 }

@@ -1,16 +1,35 @@
 package com.example.demo.config;
 
+import com.amazonaws.serverless.proxy.AwsProxySecurityContextWriter;
+import com.amazonaws.serverless.proxy.internal.jaxrs.AwsHttpApiV2SecurityContext;
+import com.amazonaws.serverless.proxy.internal.jaxrs.AwsProxySecurityContext;
+import com.amazonaws.serverless.proxy.internal.servlet.filters.UrlPathValidator;
+import com.amazonaws.serverless.proxy.model.AlbContext;
+import com.amazonaws.serverless.proxy.model.ApiGatewayAuthorizerContext;
+import com.amazonaws.serverless.proxy.model.ApiGatewayRequestIdentity;
+import com.amazonaws.serverless.proxy.model.AwsProxyRequest;
+import com.amazonaws.serverless.proxy.model.AwsProxyRequestContext;
 import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
+import com.amazonaws.serverless.proxy.model.CognitoAuthorizerClaims;
+import com.amazonaws.serverless.proxy.model.ContainerConfig;
+import com.amazonaws.serverless.proxy.model.ErrorModel;
+import com.amazonaws.serverless.proxy.model.Headers;
 import com.amazonaws.serverless.proxy.model.HttpApiV2AuthorizerMap;
+import com.amazonaws.serverless.proxy.model.HttpApiV2HttpContext;
+import com.amazonaws.serverless.proxy.model.HttpApiV2JwtAuthorizer;
 import com.amazonaws.serverless.proxy.model.HttpApiV2ProxyRequest;
 import com.amazonaws.serverless.proxy.model.HttpApiV2ProxyRequestContext;
+import com.amazonaws.serverless.proxy.model.MultiValuedTreeMap;
+import com.amazonaws.serverless.proxy.model.RequestSource;
+import com.amazonaws.serverless.proxy.model.SingleValueHeaders;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import lombok.extern.slf4j.Slf4j;
-import org.reflections.Reflections;
 import org.springframework.aot.hint.ExecutableMode;
 import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
+
+import java.util.Set;
 
 @Slf4j
 public class MyRuntimeHints implements RuntimeHintsRegistrar {
@@ -48,15 +67,39 @@ public class MyRuntimeHints implements RuntimeHintsRegistrar {
 //                            MemberCategory.INVOKE_PUBLIC_METHODS,
 //                            MemberCategory.INTROSPECT_PUBLIC_METHODS);
 
-
-            Reflections reflections = new Reflections("com.amazonaws.serverless.proxy");
-            reflections.getSubTypesOf(Object.class).forEach(type -> hints.reflection()
-                    .registerType(
+            Set.of(
+                            HttpApiV2ProxyRequest.class,
+                            HttpApiV2ProxyRequestContext.class,
+                            AwsProxyResponse.class,
+                            HttpApiV2AuthorizerMap.HttpApiV2AuthorizerSerializer.class,
+                            HttpApiV2AuthorizerMap.HttpApiV2AuthorizerDeserializer.class,
+                            AwsProxySecurityContextWriter.class,
+                            AwsHttpApiV2SecurityContext.class,
+                            AwsProxySecurityContext.class,
+                            AwsProxySecurityContext.CognitoUserPoolPrincipal.class,
+                            UrlPathValidator.class,
+                            AlbContext.class,
+                            ApiGatewayAuthorizerContext.class,
+                            ApiGatewayRequestIdentity.class,
+                            AwsProxyRequest.class,
+                            AwsProxyRequestContext.class,
+                            CognitoAuthorizerClaims.class,
+                            ContainerConfig.class,
+                            ErrorModel.class,
+                            Headers.class,
+                            HttpApiV2AuthorizerMap.class,
+                            HttpApiV2HttpContext.class,
+                            HttpApiV2JwtAuthorizer.class,
+                            MultiValuedTreeMap.class,
+                            RequestSource.class,
+                            SingleValueHeaders.class)
+                    .forEach(type -> hints.reflection().registerType(
                             type,
                             MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
                             MemberCategory.INTROSPECT_PUBLIC_CONSTRUCTORS,
                             MemberCategory.INVOKE_PUBLIC_METHODS,
                             MemberCategory.INTROSPECT_PUBLIC_METHODS));
+
         } catch (NoSuchMethodException exception) {
             throw new RuntimeException(exception);
         }
