@@ -1,9 +1,9 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.PageDto;
 import com.example.demo.dto.UserDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.example.demo.model.PageRequest;
 
 public interface UserService {
-    Page<UserDto> findAll(Pageable pageable);
+    PageDto<UserDto> findAll(PageRequest pageRequest);
 }

@@ -1,0 +1,19 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.repository.UserRepository">
+    <select id="findAll" resultType="com.example.demo.entity.User">
+        select u.id,
+               u.first_name,
+               u.last_name,
+               u.email
+        from public.users u
+        order by id
+        offset #{pageRequest.offset} limit #{pageRequest.size}
+    </select>
+
+    <select id="findTotalCount" resultType="long">
+        select count(*)
+        from public.users
+    </select>
+</mapper>
