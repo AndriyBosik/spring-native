@@ -32,6 +32,7 @@ dependencies {
 	implementation 'com.amazonaws.serverless:aws-serverless-java-container-core:2.0.0'
 	compileOnly 'com.google.code.findbugs:annotations:3.0.1'
 	implementation 'org.springframework.cloud:spring-cloud-function-serverless-web:4.0.6'
+//    implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.0.0'
 
 	runtimeOnly 'org.postgresql:postgresql'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
